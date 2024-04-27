@@ -1,0 +1,4 @@
+model_id:id,group_id:id,id,name,perm_read,perm_write,perm_create,perm_unlink
+model_logging_data,group_logging,access_logging_data_group_logging,n/a,1,0,0,0
+model_logging_data,base.group_system,logging_data_group_system,n/a,1,0,0,0
+

@@ -1,0 +1,14 @@
+<odoo>
+	<data noupdate='0'>
+		<record id="logging_data_tree" model="ir.ui.view">
+			<field name="model">logging.data</field>
+			<field name="arch" type="xml">
+				<tree default_order="" string="" >
+					<field name="date" />
+					<field name="level" />
+					<field name="line" />
+				</tree>
+			</field>
+		</record>
+	</data>
+</odoo>
