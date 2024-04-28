@@ -28,7 +28,7 @@ class LogTable(models.Model):
 
     @api.model
     def _fetch_logs(self):
-        with self._get_conn() as conn, cr:
+        with self._get_conn() as (conn, cr):
             cr.execute(
                 """
                 select id, date, ttime, line, loglevel from console_log where 
@@ -61,8 +61,8 @@ class LogTable(models.Model):
                     }
                 )
                 self.flush()
-                conn.commit()
                 self.env.cr.commit()
+                conn.commit()
 
     @contextlib.contextmanager
     @api.model
