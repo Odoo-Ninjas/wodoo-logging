@@ -4,6 +4,7 @@
     "author": "Marc Wimmer (marc@zebroo.de)",
     "depends": ["base"],
     "data": [
+        "cronjobs/transfer_logs.xml",
         "security/sec.xml",
         "views/log_table_search.xml",
         "views/log_table_tree.xml",

@@ -2,11 +2,15 @@ import os
 import psycopg2
 from odoo import _, api, fields, models, SUPERUSER_ID
 from odoo.exceptions import UserError, RedirectWarning, ValidationError
+import contextlib
 
 
 class LogTable(models.Model):
     _name = "logging.data"
+    _order = "extid desc"
+    _log_access = False
 
+    extid = fields.Integer()
     date = fields.Datetime()
     level = fields.Selection(
         [
@@ -17,40 +21,67 @@ class LogTable(models.Model):
         ]
     )
     line = fields.Char()
+    _sql_constraints = [
+        ('extid_unique', "unique(extid)", _("Only one unique entry allowed.")),
+        
+    ]
 
     @api.model
     def _fetch_logs(self):
-        conn = self._get_conn()
-        cr = conn.cursor()
-        try:
-
+        with self._get_conn() as conn, cr:
             cr.execute(
                 """
-                select id, date, ttime, line, level from console_log where 
-                coalesce(exported, false) = false order by id desc
+                select id, date, ttime, line, loglevel from console_log where 
+                coalesce(exported, false) = false 
+                order by id desc
                 limit 20000
                 """
             )
 
             for rec in cr.fetchall():
                 id, date, ttime, line, level = rec
+                if ttime:
+                    ttime = ttime.split(",")[0]
+
+                if level not in [x[0] for x in self._fields['level'].selection]:
+                    level = False
 
                 cr.execute(
-                    """update console_log
-                    set exported=true
+                    """delete from console_log
                     where id = %s
                     """,
                     (id,),
                 )
+                self.create(
+                    {
+                        "extid": id,
+                        "level": level or False,
+                        "date": f"{date} {ttime}" if date and ttime else False,
+                        "line": line,
+                    }
+                )
+                self.flush()
+                conn.commit()
+                self.env.cr.commit()
 
-        finally:
-            conn.close()
-
+    @contextlib.contextmanager
     @api.model
     def _get_conn(self):
-        psycopg2.connect(
+        conn = psycopg2.connect(
             host="fluentd_postgres",
-            username="fluentd",
+            user="fluentd",
             password="fluentd",
             dbname="fluentd",
         )
+        try:
+            cr = conn.cursor()
+            yield conn, cr
+            conn.commit()
+        finally:
+            try:
+                cr.close()
+            except: pass
+            try:
+                conn.close()
+            except:
+                pass
