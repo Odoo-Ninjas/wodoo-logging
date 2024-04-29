@@ -13,7 +13,7 @@ jobs:
     secrets: inherit
     with:
       repo_url: git@github.com:Odoo-Ninjas/wodoo-logging.git
-      branches: "12.0:13.0"
+      branches: "11.0:12.0"
       
 
   
