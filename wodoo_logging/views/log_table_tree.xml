@@ -4,12 +4,12 @@
 			<field name="model">logging.data</field>
 			<field name="arch" type="xml">
 				<tree default_order="" string="" >
-					<field name="extid"/>
-					<field name="tag"/>
+					<field name="extid" optional="hide"/>
+					<field name="tag" optional="hide"/>
 					<field name="date" />
 					<field name="level" />
-					<field name="method" />
-					<field name="url" />
+					<field name="method"  optional="hide"/>
+					<field name="url"  optional="hide"/>
 					<field name="line" />
 				</tree>
 			</field>

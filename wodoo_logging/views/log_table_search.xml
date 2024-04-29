@@ -7,6 +7,8 @@
 					<field name="line"/>
 					<field name="level"/>
 					<field name="tag"/>
+					<filter name="container_web" string="Container Odoo/Web" domain="[('tag', '=', 'odoo.log.odoo')]"/>
+					<filter name="container_cronjobs" string="Container Cronjobs" domain="[('tag', '=', 'odoo.log.odoo_cronjobs')]"/>
 					<filter name="today" string="Today" domain="[('date', '>=', context_today)]" />
 					<filter name="debug_and_higher" string="Debug and Higher" domain="[('level', 'in', ['WARN', 'INFO', 'DEBUG', 'ERROR', 'CRITIAL'])]" />
 					<filter name="info_and_higher" string="Info and Higher" domain="[('level', 'in', ['WARN', 'INFO', 'ERROR', 'CRITIAL'])]" />
