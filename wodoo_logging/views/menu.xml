@@ -4,7 +4,7 @@
 		<record id='logging_action' model='ir.actions.act_window'>
 			<field name='name'>Logs</field>
 			<field name='res_model'>logging.data</field>
-			<field name='view_mode'>tree</field>
+			<field name='view_mode'>tree,form</field>
 			<field name="help">
 				<![CDATA[<p> Nothing found!</p>]]>
 			</field>

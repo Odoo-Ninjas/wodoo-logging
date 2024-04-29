@@ -8,6 +8,10 @@
 					<field name="level"/>
 					<field name="tag"/>
 					<filter name="today" string="Today" domain="[('date', '>=', context_today)]" />
+					<filter name="debug_and_higher" string="Debug and Higher" domain="[('level', 'in', ['WARN', 'INFO', 'DEBUG', 'ERROR', 'CRITIAL'])]" />
+					<filter name="info_and_higher" string="Info and Higher" domain="[('level', 'in', ['WARN', 'INFO', 'ERROR', 'CRITIAL'])]" />
+					<filter name="warn_and_higher" string="Warn and Higher" domain="[('level', 'in', ['WARN', 'ERROR', 'CRITIAL'])]" />
+					<filter name="error_and_higher" string="Error and Higher" domain="[('level', 'in', ['ERROR', 'CRITIAL'])]" />
 					<filter name="group_by_date" string="Date" domain="[]" context="{'group_by':'date:day'}"/>
 					<filter name="group_by_level" string="Level" domain="[]" context="{'group_by':'date:day'}"/>
 					<filter name="group_by_tag" string="Tag" domain="[]" context="{'group_by':'tag'}"/>

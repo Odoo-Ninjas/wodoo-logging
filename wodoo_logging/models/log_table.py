@@ -1,4 +1,5 @@
 import os
+import re
 import datetime
 import psycopg2
 from odoo import _, api, fields, models, SUPERUSER_ID
@@ -16,26 +17,56 @@ class LogTable(models.Model):
     extid = fields.Integer(index=True)
     tag = fields.Char("Container")
     date = fields.Datetime()
+    method = fields.Char("Method")
+    url = fields.Char("URL")
     level = fields.Selection(
         [
             ("INFO", "INFO"),
             ("ERROR", "ERROR"),
             ("WARN", "WARN"),
             ("DEBUG", "DEBUG"),
+            ("CRITICAL", "CRITICAL"),
         ]
     )
     line = fields.Text()
     _sql_constraints = [
-        ('extid_unique', "unique(extid)", _("Only one unique entry allowed.")),
-        
+        ("extid_unique", "unique(extid)", _("Only one unique entry allowed.")),
     ]
+
+    @api.model
+    def _parse_line(self, line):
+        for level in [x[0] for x in self._fields["level"].selection]:
+            if f" {level.upper()}" in line:
+                break
+        else:
+            level = False
+
+        match = re.findall(r"\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d", line)
+        if match:
+            date = match[0]
+        else:
+            date = False
+
+        for method in ["GET", "POST"]:
+            if f" {method} " in line:
+                break
+        else:
+            method = False
+
+        match = re.findall(r"/\ \/[^\ ]*", line)
+        if match:
+            url = match[0]
+        else:
+            url = False
+
+        return date, level, method, url
 
     @api.model
     def _fetch_logs(self):
         with self._get_conn() as (conn, cr):
             cr.execute(
                 """
-                select id, date, ttime, line, loglevel from console_log where 
+                select id, line, tag from console_log where 
                 coalesce(exported, false) = false 
                 order by id desc
                 limit 20000
@@ -43,12 +74,8 @@ class LogTable(models.Model):
             )
 
             for rec in cr.fetchall():
-                id, date, ttime, line, level = rec
-                if ttime:
-                    ttime = ttime.split(",")[0]
-
-                if level not in [x[0] for x in self._fields['level'].selection]:
-                    level = False
+                id, line, tag = rec
+                date, level, method, url = self._parse_line(line)
 
                 cr.execute(
                     """delete from console_log
@@ -56,19 +83,16 @@ class LogTable(models.Model):
                     """,
                     (id,),
                 )
-                if not self.search_count([('extid', '=', id)]):
-                    strdate = f"{date} {ttime}" if date and ttime else False,
-                    try:
-                        if strdate:
-                            datetime.datetime.strptime(strdate, DEFAULT_SERVER_DATETIME_FORMAT)
-                    except:
-                        strdate = False
+                if not self.search_count([("extid", "=", id)]):
                     self.create(
                         {
                             "extid": id,
                             "level": level or False,
-                            "date": strdate,
+                            "date": date,
                             "line": line,
+                            "tag": tag,
+                            "method": method,
+                            "url": url,
                         }
                     )
                     self.flush()
@@ -91,7 +115,8 @@ class LogTable(models.Model):
         finally:
             try:
                 cr.close()
-            except: pass
+            except:
+                pass
             try:
                 conn.close()
             except:

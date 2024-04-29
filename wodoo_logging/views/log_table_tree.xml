@@ -8,6 +8,8 @@
 					<field name="tag"/>
 					<field name="date" />
 					<field name="level" />
+					<field name="method" />
+					<field name="url" />
 					<field name="line" />
 				</tree>
 			</field>

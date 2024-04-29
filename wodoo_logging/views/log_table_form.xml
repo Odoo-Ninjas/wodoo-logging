@@ -12,6 +12,8 @@
 							<field name="tag"/>
 							<field name="level" />
 							<field name="date" />
+							<field name="method" />
+							<field name="url" />
 						</group>
 						<field name="line" colspan='2'/>
 					</sheet>
