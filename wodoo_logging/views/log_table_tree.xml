@@ -4,6 +4,9 @@
 			<field name="model">logging.data</field>
 			<field name="arch" type="xml">
 				<tree default_order="" string="" decoration-warning="level in ['ERROR', 'CRITICAL'] or is_traceback">
+					<header>
+						<button name="fetch_now" string="Fetch Now" type="object" />
+					</header>
 					<field name="extid" optional="hide"/>
 					<field name="tag" optional="hide"/>
 					<field name="date" optional="show"/>

@@ -36,6 +36,11 @@ class LogTable(models.Model):
     ]
 
     @api.model
+    def fetch_now(self, *args, **kwargs):
+        self._fetch_logs()
+        return True
+
+    @api.model
     def _parse(self):
         line = self.orig_line or ''
         if not line:
@@ -79,7 +84,7 @@ class LogTable(models.Model):
             "url": url,
         }
         vals['is_traceback'] = "Traceback" in line
-        self.write(vals)
+        self.sudo().write(vals)
 
     @api.model
     def _make_nice_line(self, line):
@@ -120,7 +125,7 @@ class LogTable(models.Model):
                     date = date or fields.Datetime.now()
 
                 if not self.search_count([("extid", "=", id)]):
-                    line = self.create(
+                    line = self.sudo().create(
                         {
                             "extid": id,
                             "orig_line": orig_line,
