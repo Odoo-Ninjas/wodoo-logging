@@ -20,6 +20,7 @@ class LogTable(models.Model):
     date = fields.Datetime()
     method = fields.Char("Method")
     url = fields.Char("URL")
+    is_traceback = fields.Boolean()
     level = fields.Selection(
         [
             ("INFO", "INFO"),
@@ -69,6 +70,7 @@ class LogTable(models.Model):
 
         line = self._make_nice_line(line)
 
+
         vals = {
             "level": level or False,
             "date": date or fields.Datetime.now(),
@@ -76,6 +78,7 @@ class LogTable(models.Model):
             "method": method,
             "url": url,
         }
+        vals['is_traceback'] = "Traceback" in line
         self.write(vals)
 
     @api.model

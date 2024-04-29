@@ -3,7 +3,7 @@
 		<record id="logging_data_tree" model="ir.ui.view">
 			<field name="model">logging.data</field>
 			<field name="arch" type="xml">
-				<tree default_order="" string="" >
+				<tree default_order="" string="" decoration-warning="level in ['ERROR', 'CRITICAL'] or is_traceback">
 					<field name="extid" optional="hide"/>
 					<field name="tag" optional="hide"/>
 					<field name="date" optional="show"/>
@@ -12,6 +12,7 @@
 					<field name="url"  optional="hide"/>
 					<field name="line" optional="show"/>
 					<field name="orig_line" optional="hide" />
+					<field name="is_traceback" optional="hide"/>
 				</tree>
 			</field>
 		</record>

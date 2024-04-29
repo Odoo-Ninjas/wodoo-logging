@@ -9,6 +9,8 @@
 					<field name="tag"/>
 					<field name="url"/>
 					<field name="orig_line"/>
+
+					<filter name="is_traceback" string="Tracebacks" domain="[('is_traceback', '=', True)]"/>
 					<filter name="container_web" string="Container Odoo/Web" domain="[('tag', '=', 'odoo.log.odoo')]"/>
 					<filter name="container_cronjobs" string="Container Cronjobs" domain="[('tag', '=', 'odoo.log.odoo_cronjobs')]"/>
 					<filter name="today" string="Today" domain="[('date', '>=', context_today)]" />
