@@ -6,6 +6,7 @@
     "data": [
         "cronjobs/transfer_logs.xml",
         "security/sec.xml",
+        "views/log_table_form.xml",
         "views/log_table_search.xml",
         "views/log_table_tree.xml",
         "views/menu.xml",

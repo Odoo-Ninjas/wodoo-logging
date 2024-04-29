@@ -4,6 +4,8 @@
 			<field name="model">logging.data</field>
 			<field name="arch" type="xml">
 				<tree default_order="" string="" >
+					<field name="extid"/>
+					<field name="tag"/>
 					<field name="date" />
 					<field name="level" />
 					<field name="line" />

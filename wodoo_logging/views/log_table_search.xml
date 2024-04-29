@@ -6,9 +6,11 @@
 				<search string="">
 					<field name="line"/>
 					<field name="level"/>
+					<field name="tag"/>
 					<filter name="today" string="Today" domain="[('date', '>=', context_today)]" />
 					<filter name="group_by_date" string="Date" domain="[]" context="{'group_by':'date:day'}"/>
 					<filter name="group_by_level" string="Level" domain="[]" context="{'group_by':'date:day'}"/>
+					<filter name="group_by_tag" string="Tag" domain="[]" context="{'group_by':'tag'}"/>
 				</search>
 			</field>
 		</record>
